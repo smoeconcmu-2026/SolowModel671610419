@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>แบบจำลองการเติบโตของ Solow</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--tx:#1d2433;--mu:#5b6578;--bd:#dde3ee;--pr:#1f3a6e;--Y:#2563eb;--I:#16a34a;--D:#dc2626;--ok:#e8f6ee;--okt:#14653a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10141c;--card:#1a2030;--tx:#e8ecf4;--mu:#9aa6bd;--bd:#2c3550;--pr:#8fb0ee;--Y:#60a5fa;--I:#4ade80;--D:#f87171;--ok:#12301f;--okt:#7ee0a5}}
+:root[data-theme="dark"]{--bg:#10141c;--card:#1a2030;--tx:#e8ecf4;--mu:#9aa6bd;--bd:#2c3550;--pr:#8fb0ee;--Y:#60a5fa;--I:#4ade80;--D:#f87171;--ok:#12301f;--okt:#7ee0a5}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Sarabun',system-ui,sans-serif;line-height:1.7;font-size:16px}
+header{background:#1f3a6e;color:#fff;padding:36px 20px;text-align:center}
+header h1{margin:0 0 8px;font-size:clamp(24px,5vw,38px)}header p{margin:2px 0;opacity:.92}
+main{max-width:980px;margin:0 auto;padding:16px}
+section{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:22px;margin:18px 0}
+h2{margin:0 0 12px;color:var(--pr);font-size:22px;border-left:5px solid var(--pr);padding-left:10px}
+.eq{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px 16px;font-size:19px;font-family:Georgia,'Times New Roman',serif;margin:6px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.box{border:1px solid var(--bd);border-radius:10px;padding:12px 14px}
+.box b{display:block;color:var(--pr)}
+.ctl{margin:12px 0}.ctl label{display:flex;justify-content:space-between;font-weight:600}
+.ctl output{font-family:monospace;color:var(--pr)}input[type=range]{width:100%}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0}
+.res div{border-radius:12px;padding:14px;border:1px solid var(--bd);text-align:center}
+.res small{color:var(--mu);display:block}.res strong{font-size:26px;font-family:monospace}
+canvas{width:100%;height:380px;display:block;background:var(--card);border:1px solid var(--bd);border-radius:10px}
+.leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:14px}.leg i{display:inline-block;width:22px;height:4px;vertical-align:middle;margin-right:6px}
+button{background:var(--pr);color:#fff;border:0;border-radius:10px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer;margin:4px 6px 4px 0}
+:root:not([data-theme=light]) button{color:#10141c}
+button.alt{background:transparent;color:var(--pr);border:1px solid var(--pr)}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}th,td{padding:8px;border-bottom:1px solid var(--bd);text-align:right}th:first-child,td:first-child{text-align:left}
+.tw{overflow-x:auto}.hl{background:#fff4d6;color:#5b4300;border-radius:10px;padding:12px 14px;margin-top:12px}
+.chk{background:var(--ok);color:var(--okt);border-radius:10px;padding:12px 14px;font-weight:700;margin-top:10px}
+.chk.bad{background:#fde8e8;color:#8a1c1c}
+footer{text-align:center;color:var(--mu);padding:20px;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+<h1>แบบจำลองการเติบโตของ Solow</h1>
+<p>ชื่อ-นามสกุล: สิริยากร มหาวรรณศรี</p>
+<p>รหัสนักศึกษา: 671610419</p>
+</header>
+<main>
+
+<section id="s1">
+<h2>ส่วนที่ 1 อธิบายแบบจำลอง</h2>
+<p>แบบจำลอง Solow ในเว็บไซต์นี้ศึกษาความสัมพันธ์ระหว่าง <b>ทุน ผลผลิต การลงทุน และค่าเสื่อม</b> โดยใช้สมการตามสไลด์เท่านั้น</p>
+<div class="eq">Y = A·√K</div>
+<div class="eq">I = s·Y</div>
+<div class="eq">D = δ·K</div>
+<div class="eq">ΔK = sY − δK</div>
+<div class="grid" style="margin-top:12px">
+<div class="box"><b>K</b>ทุน</div><div class="box"><b>Y</b>ผลผลิต</div>
+<div class="box"><b>s</b>อัตราการออม</div><div class="box"><b>δ</b>อัตราค่าเสื่อม</div>
+<div class="box"><b>A</b>ระดับเทคโนโลยี ความรู้ และนวัตกรรม</div>
+</div>
+<h3>ผลของแต่ละตัวแปร</h3>
+<div class="grid">
+<div class="box"><b>s เพิ่มขึ้น</b>→ การลงทุนเพิ่มขึ้น → ทุนสะสมได้มากขึ้น → steady-state K* และ Y* เพิ่มขึ้น</div>
+<div class="box"><b>δ เพิ่มขึ้น</b>→ ค่าเสื่อมเพิ่มขึ้น → ทุนลดลงเร็วขึ้น → steady-state K* และ Y* ลดลง</div>
+<div class="box"><b>A เพิ่มขึ้น</b>→ ผลผลิตเพิ่มขึ้นที่ทุกระดับ K → การลงทุนเพิ่มขึ้น → steady-state K* และ Y* เพิ่มขึ้น</div>
+</div>
+<div class="hl"><b>Steady State คือจุดที่การลงทุนเท่ากับค่าเสื่อม (I = D)</b> หรือ sY = δK ซึ่งทำให้ ΔK = 0<br>
+K* = (sA/δ)² &nbsp;|&nbsp; Y* = A√K* = sA²/δ &nbsp;|&nbsp; C* = (1−s)Y*</div>
+</section>
+
+<section id="s2">
+<h2>ส่วนที่ 2 Interactive Simulation</h2>
+<div class="ctl"><label>s (อัตราการออม) <output id="vs"></output></label><input id="s" type="range" min="0.05" max="0.95" step="0.01" value="0.38"></div>
+<div class="ctl"><label>δ (อัตราค่าเสื่อม) <output id="vd"></output></label><input id="d" type="range" min="0.005" max="0.10" step="0.001" value="0.022"></div>
+<div class="ctl"><label>A (ระดับเทคโนโลยี) <output id="va"></output></label><input id="a" type="range" min="0.5" max="6" step="0.01" value="2.60"></div>
+<button class="alt" id="reset">รีเซ็ตเป็นค่าเริ่มต้น</button>
+</section>
+
+<section id="s3">
+<h2>ส่วนที่ 3 กราฟ</h2>
+<canvas id="cv" height="380"></canvas><noscript><p>กราฟต้องเปิดใช้งาน JavaScript ในเบราว์เซอร์</p></noscript>
+<div class="leg">
+<span><i style="background:var(--Y)"></i>Y = A·√K (ผลผลิต)</span>
+<span><i style="background:var(--I)"></i>I = sA·√K (การลงทุน)</span>
+<span><i style="background:var(--D)"></i>D = δK (ค่าเสื่อม)</span>
+<span>● จุด Steady State</span>
+</div>
+<p style="color:var(--mu);font-size:14px;margin:6px 0 0">แกนนอน = K (ทุน) แกนตั้ง = Y, I, D — ช่วงของแกนปรับอัตโนมัติตามค่า K*</p>
+</section>
+
+<section id="s4">
+<h2>ส่วนที่ 4 ผลลัพธ์ Steady State</h2>
+<div class="res">
+<div><small>Steady-State Capital</small><strong id="rK"></strong><small>K*</small></div>
+<div><small>Steady-State Output</small><strong id="rY"></strong><small>Y*</small></div>
+<div><small>Steady-State Consumption</small><strong id="rC"></strong><small>C*</small></div>
+</div>
+</section>
+
+<section id="s5">
+<h2>ส่วนที่ 5 สถานการณ์เศรษฐกิจดิจิทัล: ประเทศไทยนำ AI มาใช้</h2>
+<p style="color:var(--mu);font-size:14px">ค่าเริ่มต้นคำนวณจากรหัสนักศึกษา 671610419: s = 0.20 + 9×0.02 = 0.38, δ = 0.02 + 1×0.002 = 0.022, A = 2.6</p><p>จำลองว่าเทคโนโลยี A เพิ่มขึ้น 20% (A<sub>new</sub> = A × 1.20) โดย s และ δ คงเดิม</p>
+<button id="ai">จำลองการนำ AI มาใช้ (+20% A)</button><button class="alt" id="aioff">ยกเลิกสถานการณ์</button>
+<div id="aibox" style="display:none">
+<p><b>A เดิม = <span id="a0"></span></b> &nbsp;→&nbsp; <b>A หลังใช้ AI = <span id="a1"></span></b></p>
+<div class="tw"><table>
+<thead><tr><th>ตัวแปร</th><th>ก่อนใช้ AI</th><th>หลังใช้ AI</th><th>เปลี่ยนแปลง</th><th>%</th></tr></thead>
+<tbody id="tb"></tbody></table></div>
+<div class="hl">แม้ A เพิ่มขึ้นเพียง <b>20%</b> แต่ K*, Y* และ C* เพิ่มขึ้นประมาณ <b id="pc"></b> เพราะ K* = (sA/δ)² และ Y* = sA²/δ ขึ้นอยู่กับ <b>A²</b> (1.20² = 1.44)</div>
+</div>
+</section>
+
+<section id="s6">
+<h2>ส่วนที่ 6 ตรวจสอบ Steady State</h2>
+<div class="tw"><table><tbody>
+<tr><td>I* = sY*</td><td id="cI"></td></tr>
+<tr><td>D* = δK*</td><td id="cD"></td></tr>
+</tbody></table></div>
+<div class="chk" id="ck"></div>
+</section>
+<section id="s7">
+<h2>ส่วนที่ 7 คำถามท้ายบท: เพิ่ม A เทียบกับเพิ่ม s และการเติบโตระยะยาว</h2>
+<p>เมื่อเพิ่ม <b>A ขึ้น 20%</b> ทั้ง K* และ Y* เพิ่มขึ้น <b>44%</b> (1.20² = 1.44) เพราะ A อยู่ในสูตร K* = (sA/δ)² และ Y* = sA²/δ ในรูปกำลังสอง ส่วนเมื่อเพิ่ม <b>s ขึ้น 20%</b> K* ยังเพิ่มขึ้น 44% แต่ Y* เพิ่มขึ้นเพียง <b>20%</b> เพราะ Y* เป็นสัดส่วนเชิงเส้นกับ s และการออมที่สูงขึ้นยังทำให้สัดส่วนการบริโภค (1−s) ลดลง ความต่างคือ A ยกผลผลิตขึ้นที่ทุกระดับ K ขณะที่ s เพียงแบ่งผลผลิตไปลงทุนมากขึ้น</p>
+<p>ในระยะยาว การเพิ่ม s หรือลด δ ทำให้ผลผลิตสูงขึ้นเพียงครั้งเดียว เพราะ Y = A·√K มีผลตอบแทนต่อทุนลดลง (diminishing returns) เมื่อถึงจุด I = D จะได้ ΔK = 0 และการเติบโตหยุดลง สิ่งที่ทำให้ผลผลิตเติบโตได้ต่อเนื่องคือ <b>A ที่เพิ่มขึ้นเรื่อย ๆ</b> (เทคโนโลยี ความรู้ และนวัตกรรม) เพราะเลื่อนเส้น I = sA·√K ขึ้นไปเรื่อย ๆ ทำให้ steady state สูงขึ้นอย่างต่อเนื่อง</p>
+</section>
+</main>
+<footer>แบบจำลอง Solow ตามสไลด์รายวิชาเศรษฐศาสตร์ — ใช้เฉพาะ Y = A·√K, I = sY, D = δK</footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const f3=x=>x.toLocaleString('en-US',{minimumFractionDigits:3,maximumFractionDigits:3});
+const ss=(s,d,A)=>{const K=Math.pow(s*A/d,2),Y=s*A*A/d;return{K,Y,C:(1-s)*Y}};
+let aiOn=false;
+const get=()=>({s:+$('s').value,d:+$('d').value,A:+$('a').value});
+
+function draw(p){
+ const cv=$('cv'),r=devicePixelRatio||1,W=cv.clientWidth||cv.parentElement.clientWidth||600,H=cv.clientHeight||380;
+ cv.width=W*r;cv.height=H*r;const g=cv.getContext('2d');g.scale(r,r);
+ const st=getComputedStyle(document.documentElement),col=n=>st.getPropertyValue(n).trim();
+ const R=ss(p.s,p.d,p.A),N=aiOn?ss(p.s,p.d,p.A*1.2):null;
+ const Kmax=Math.max(R.K,N?N.K:0)*1.8;
+ const Ymax=Math.max(p.A*Math.sqrt(Kmax),p.d*Kmax)*1.08*(aiOn?1.2:1)/(aiOn?1.2:1);
+ const m={l:56,r:14,t:14,b:44},w=W-m.l-m.r,h=H-m.t-m.b;
+ const X=k=>m.l+k/Kmax*w,Yp=v=>m.t+h-v/Ymax*h;
+ const tx=col('--tx'),mu=col('--mu'),bd=col('--bd');
+ g.font='12px Sarabun,sans-serif';g.lineWidth=1;
+ for(let i=0;i<=5;i++){
+  const kv=Kmax*i/5,yv=Ymax*i/5;
+  g.strokeStyle=bd;g.beginPath();g.moveTo(X(kv),m.t);g.lineTo(X(kv),m.t+h);g.moveTo(m.l,Yp(yv));g.lineTo(m.l+w,Yp(yv));g.stroke();
+  g.fillStyle=mu;g.textAlign='center';g.fillText(Math.round(kv).toLocaleString(),X(kv),m.t+h+16);
+  g.textAlign='right';g.fillText(yv.toFixed(yv<10?1:0),m.l-6,Yp(yv)+4);
+ }
+ g.fillStyle=tx;g.textAlign='center';g.fillText('K (ทุน)',m.l+w/2,H-6);
+ g.save();g.translate(14,m.t+h/2);g.rotate(-Math.PI/2);g.fillText('Y, I, D',0,0);g.restore();
+ const
