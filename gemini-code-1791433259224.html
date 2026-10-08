@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบจำลองการเติบโตของ Solow - เศรษฐศาสตร์ มช.</title>
+    <!-- โหลด Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <!-- โหลด MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Prompt', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+    <header class="bg-indigo-900 text-white shadow-lg py-5 px-6 mb-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight">แบบจำลองการเติบโตของ Solow (Solow Growth Model)</h1>
+                <p class="text-indigo-200 text-sm">คณะเศรษฐศาสตร์ มหาวิทยาลัยเชียงใหม่</p>
+            </div>
+            <div class="bg-indigo-800/80 px-5 py-2.5 rounded-xl border border-indigo-700 text-right shadow-inner">
+                <p class="text-sm font-medium">ชื่อ-นามสกุล: <span id="studentName" class="text-amber-300 font-semibold">[ชื่อ-นามสกุลของคุณ]</span></p>
+                <p class="text-sm font-medium">รหัสประจำตัว: <span id="studentId" class="text-amber-300 font-semibold">671610105</span></p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 pb-16 space-y-8">
+        
+        <section class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200/80">
+            <h2 class="text-lg font-bold text-indigo-900 mb-2">คำอธิบายแบบจำลอง</h2>
+            <p class="text-slate-600 text-sm leading-relaxed">
+                แบบจำลองใช้สมการการผลิต \(Y = A\sqrt{K}\), การลงทุน \(I = sY\), และค่าเสื่อมราคา \(D = \delta K\) 
+                โดยจุดสภาวะคงตัว (Steady State) เกิดขึ้นเมื่อการลงทุนเท่ากับค่าเสื่อมราคา (\(sY = \delta K\)) ซึ่งระดับเทคโนโลยี (\(A\)) จะช่วยขับเคลื่อนให้ผลผลิตและทุนเพิ่มสูงขึ้นอย่างมีนัยสำคัญ
+            </p>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200/80 lg:col-span-4 space-y-6">
+                <div>
+                    <h2 class="text-lg font-bold text-indigo-900 mb-5">กำหนดค่าตัวแปร (Parameters)</h2>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1.5">
+                                <span class="font-medium text-slate-700">อัตราการออม (\(s\)):</span>
+                                <span id="sVal" class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">0.300</span>
+                            </div>
+                            <input type="range" id="sInput" min="0.1" max="0.9" step="0.01" value="0.30" class="w-full accent-indigo-600 cursor-pointer" oninput="updateModel()">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm mb-1.5">
+                                <span class="font-medium text-slate-700">อัตราค่าเสื่อมราคา (\(\delta\)):</span>
+                                <span id="deltaVal" class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">0.020</span>
+                            </div>
+                            <input type="range" id="deltaInput" min="0.005" max="0.1" step="0.001" value="0.02" class="w-full accent-indigo-600 cursor-pointer" oninput="updateModel()">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm mb-1.5">
+                                <span class="font-medium text-slate-700">ระดับเทคโนโลยี (\(A\)):</span>
+                                <span id="aVal" class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">2.600</span>
+                            </div>
+                            <input type="range" id="aInput" min="1.0" max="5.0" step="0.1" value="2.6" class="w-full accent-indigo-600 cursor-pointer" oninput="updateModel()">
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-slate-100">
+                        <h3 class="text-sm font-bold text-slate-700 mb-3">สถานการณ์เศรษฐกิจดิจิทัล</h3>
+                        <button onclick="simulateAI()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-4 rounded-xl transition duration-200 text-sm shadow-md mb-2.
